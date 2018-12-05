@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">LiftSimulator</string>
+    <string name="main_floor_text">Etage :</string>
+    <string name="floor_num_0">0</string>
+    <string name="floor_num_1">1</string>
+    <string name="floor_num_2">2</string>
+    <string name="floor_num_3">3</string>
+    <string name="floor_num_4">4</string>
+    <string name="floor_num_5">5</string>
+    <string name="floor_num_6">6</string>
+    <string name="floor_num_7">7</string>
+    <string name="floor_num_8">8</string>
+    <string name="floor_num_9">9</string>
+    <string name="not_moving">It\'s not moving !</string>
+    <string name="moving">It\'s moving !</string>
+</resources>
