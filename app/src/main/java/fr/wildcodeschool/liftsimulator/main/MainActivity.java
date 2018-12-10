@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         new MoveLift(this).execute(text);
     }
 
-    class MoveLift extends AsyncTask<Integer, Void, Integer> {
+    static class MoveLift extends AsyncTask<Integer, Void, Integer> {
 
         private WeakReference<MainActivity> mainActivity;
 
