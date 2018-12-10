@@ -10,12 +10,16 @@ public class MainPresenterImpl<V extends MainView>
     private int currentFloor;
     private int endFloor;
 
-    @Override
-    public void onStart() {
+    MainPresenterImpl() {
         this.isMoving = false;
         this.currentFloor = 0;
         this.endFloor = this.currentFloor;
+    }
+
+    @Override
+    public void onStart() {
         getView().setFloor(this.currentFloor);
+        getView().setMoving(this.isMoving);
     }
 
     @Override
@@ -31,8 +35,7 @@ public class MainPresenterImpl<V extends MainView>
 
     private void nextMovingFloor() {
         if (this.endFloor != this.currentFloor) {
-            this.currentFloor = this.endFloor > this.currentFloor ? this.currentFloor + 1 : this.currentFloor - 1;
-            getView().movingFloor(this.currentFloor);
+            getView().movingFloor();
         } else {
             this.isMoving = false;
             getView().setMoving(this.isMoving);
@@ -41,6 +44,13 @@ public class MainPresenterImpl<V extends MainView>
 
     @Override
     public void onEndMovingFloor() {
+        this.currentFloor = this.endFloor > this.currentFloor ? this.currentFloor + 1 : this.currentFloor - 1;
+        getView().setFloor(this.currentFloor);
         nextMovingFloor();
+    }
+
+    @Override
+    public void onCancelMoving() {
+        this.isMoving = false;
     }
 }

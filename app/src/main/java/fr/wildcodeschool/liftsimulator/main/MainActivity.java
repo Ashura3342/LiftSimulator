@@ -2,7 +2,6 @@ package fr.wildcodeschool.liftsimulator.main;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     private MainPresenter<MainView> presenter = new MainPresenterImpl<>();
     private TextView floorValueView;
     private TextView movingView;
+    private MoveLift moveLift;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        presenter.onRestart();
+    }
+
+    @Override
+    protected void onStop() {
+        if (moveLift != null)
+            moveLift.cancel(true);
+        presenter.onCancelMoving();
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         presenter.detach();
         super.onDestroy();
@@ -64,47 +78,41 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void setFloor(final int position) {
-        floorValueView.post(new Runnable() {
-            @Override
-            public void run() {
-                floorValueView.setText(getString(buttonsText[position]));
-            }
-        });
-        presenter.onEndMovingFloor();
+        floorValueView.setText(getString(buttonsText[position]));
     }
 
     @Override
     public void setMoving(final boolean moving) {
-        movingView.post(new Runnable() {
-            @Override
-            public void run() {
-                movingView.setText(getString(moving ? R.string.moving : R.string.not_moving));
-            }
-        });
+        movingView.setText(getString(moving ? R.string.moving : R.string.not_moving));
     }
 
     @Override
-    public void movingFloor(final int text) {
-        new MoveLift(this).execute(text);
+    public void movingFloor() {
+        moveLift = new MoveLift(this.presenter);
+        moveLift.execute();
     }
 
-    static class MoveLift extends AsyncTask<Integer, Void, Integer> {
+    static class MoveLift extends AsyncTask<Void, Void, Void> {
 
-        private WeakReference<MainActivity> mainActivity;
+        private WeakReference<MainPresenter<MainView> > presenter;
 
-        MoveLift(MainActivity mainActivity) {
-            this.mainActivity = new WeakReference<>(mainActivity);
+        MoveLift(MainPresenter<MainView> presenter) {
+            this.presenter = new WeakReference<>(presenter);
         }
 
         @Override
-        protected Integer doInBackground(Integer... args) {
-            SystemClock.sleep(3000);
-            return args[0];
+        protected Void doInBackground(Void... args) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Integer result) {
-            this.mainActivity.get().setFloor(result);
+        protected void onPostExecute(Void result) {
+            this.presenter.get().onEndMovingFloor();
         }
     }
 }
