@@ -14,11 +14,6 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
     }
 
     @Override
-    public void onRestart() {
-        onStart();
-    }
-
-    @Override
     public void attach(V view) {
         this.view = view;
         onStart();

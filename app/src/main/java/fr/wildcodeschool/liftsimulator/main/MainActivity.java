@@ -57,21 +57,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        presenter.onRestart();
-    }
-
-    @Override
-    protected void onStop() {
+    protected void onDestroy() {
         if (moveLift != null)
             moveLift.cancel(true);
-        presenter.onCancelMoving();
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
         presenter.detach();
         super.onDestroy();
     }

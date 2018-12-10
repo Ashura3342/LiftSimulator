@@ -48,9 +48,4 @@ public class MainPresenterImpl<V extends MainView>
         getView().setFloor(this.currentFloor);
         nextMovingFloor();
     }
-
-    @Override
-    public void onCancelMoving() {
-        this.isMoving = false;
-    }
 }
